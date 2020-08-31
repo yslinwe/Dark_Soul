@@ -22,7 +22,7 @@ namespace SG
         }
         void Start()
         {
-            cameraHandler = CameraHandler.singleton;
+            cameraHandler = FindObjectOfType<CameraHandler>();
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
@@ -36,6 +36,7 @@ namespace SG
             inputHandler.TickInput(delta);
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.HandleRollingAndSprinting(delta);
+            playerLocomotion.HandleFalling(delta,playerLocomotion.moveDirection);
         }
         private void FixedUpdate()
         {
@@ -49,7 +50,12 @@ namespace SG
         private void LateUpdate() {
             inputHandler.rollFlag = false;
             inputHandler.sprintFlag = false;
-            isSprinting = inputHandler.b_Input;
+            inputHandler.rb_Input = false;
+            inputHandler.rt_Input = false;
+            if(isInAir)
+            {
+                playerLocomotion.inAirTimer += Time.deltaTime;
+            }
         }
 
     }
