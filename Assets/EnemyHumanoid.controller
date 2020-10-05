@@ -171,7 +171,7 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -3305834215451647247}
-    m_Position: {x: 360, y: 210, z: 0}
+    m_Position: {x: 370, y: 230, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 900808943706855537}
     m_Position: {x: 360, y: 30, z: 0}
@@ -805,7 +805,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Humanoid
+  m_Name: EnemyHumanoid
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Vertical
