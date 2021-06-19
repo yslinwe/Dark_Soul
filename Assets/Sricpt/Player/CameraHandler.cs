@@ -35,7 +35,7 @@ namespace SG
             singleton = this;
             myTransform = transform;
             defaultPosition = cameraTransform.localPosition.z;
-            ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10);
+            ignoreLayers = ~(1 << 9);
             targetTransform = FindObjectOfType<PlayerManager>().transform;
         }
         public void FollowTarget(float delta)

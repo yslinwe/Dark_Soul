@@ -33,7 +33,7 @@ namespace SG
         [SerializeField]
         float rotationSpeed = 10;
         [SerializeField]
-        float fallingSpeed = 45;
+        float fallingSpeed = 200;
         void Start()
         {
             rigidbody = GetComponent<Rigidbody>();
@@ -44,7 +44,7 @@ namespace SG
             myTransform = transform;
             animatorHandler.Initialize();
             playerManager.isGrounded = true;
-            ignoreForGroundCheck = ~(1<<8 | 1<<11);
+            ignoreForGroundCheck = ~(1<<8);
         }
        
         #region Movement
@@ -129,7 +129,7 @@ namespace SG
             {   
                 rigidbody.AddForce(-Vector3.up*fallingSpeed);
                 rigidbody.AddForce(moveDirection*fallingSpeed/5f);
-                fallingSpeed +=delta*100;
+                // fallingSpeed +=delta*fallingSpeed;
             }
 
             playerManager.isGrounded = false;
@@ -180,14 +180,14 @@ namespace SG
             }
             if(playerManager.isGrounded)
             {
-                // if(playerManager.isInteracting || inputHandler.moveAmount > 0)
-                // {
-                //     myTransform.position = Vector3.Lerp(myTransform.position, targetPositon, Time.deltaTime);
-                // }
-                // else
-                // {
-                // }
-                fallingSpeed = 80;
+                if(playerManager.isInteracting || inputHandler.moveAmount > 0)
+                {
+                    myTransform.position = Vector3.Lerp(myTransform.position, targetPositon, Time.deltaTime);
+                }
+                // // else
+                // // {
+                // // }
+                // fallingSpeed = 80;
             }
                 myTransform.position = targetPositon;
         }

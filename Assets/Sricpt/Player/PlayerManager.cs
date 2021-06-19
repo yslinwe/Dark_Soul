@@ -44,24 +44,21 @@ namespace SG
 
             float delta = Time.deltaTime;
             inputHandler.TickInput(delta);
-            playerLocomotion.HandleMovement(delta);
+          
             playerLocomotion.HandleJumping();
             playerLocomotion.HandleRollingAndSprinting(delta);
-            playerLocomotion.HandleFalling(delta,playerLocomotion.moveDirection);
             CheckForInteractableObject();
+         
         }
         private void FixedUpdate()
         {
             float delta = Time.fixedDeltaTime;
-            if (cameraHandler != null)
-            {
-                cameraHandler.FollowTarget(delta);
-                cameraHandler.HandleCameraRotation(delta, inputHandler.mouseX, inputHandler.mouseY);
-            }
+            playerLocomotion.HandleMovement(delta);
+            playerLocomotion.HandleFalling(delta,playerLocomotion.moveDirection);
         }
         private void LateUpdate() {
             inputHandler.rollFlag = false;
-            inputHandler.sprintFlag = false;
+            // inputHandler.sprintFlag = false;
             inputHandler.rb_Input = false;
             inputHandler.rt_Input = false;
             inputHandler.d_Pad_Down = false;
@@ -71,7 +68,12 @@ namespace SG
             inputHandler.a_Input = false;
             inputHandler.jump_Input = false;
             inputHandler.inventory_Input = false;
-
+            float delta = Time.deltaTime;
+            if (cameraHandler != null)
+            {
+                cameraHandler.FollowTarget(delta);
+                cameraHandler.HandleCameraRotation(delta, inputHandler.mouseX, inputHandler.mouseY);
+            }
             if(isInAir)
             {
                 playerLocomotion.inAirTimer += Time.deltaTime;

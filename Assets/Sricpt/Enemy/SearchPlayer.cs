@@ -38,14 +38,18 @@ namespace SG
         Vector3 targetPositon;
         Transform myTransform;
         Vector3 myTransformPos;
+        public new Rigidbody rigidbody;
+        float fallingSpeed = 45;
+        public float inAirTimer;
         void Start()
         {
             animatorHandler = GetComponentInChildren<EnemyAnimatorHandler>();
             enemyAttack = GetComponent<EnemyAttack>();
             enemyStates = GetComponent<EnemyStates>();
+            rigidbody = GetComponent<Rigidbody>();
             enemyWeaponSlotManager = GetComponentInChildren<EnemyWeaponSlotManager>();
             enemyWeaponSlotManager.LoadWeaponOnSlot(false);
-            ignoreForGroundCheck = ~(1<<8 | 1<<11);
+            ignoreForGroundCheck = ~(1<<8);
             myTransform = transform;
             myTransformPos = transform.position;
         }
@@ -72,7 +76,7 @@ namespace SG
                 senserTimer += Time.deltaTime;
                 Vector3 playerPosition = new Vector3(playTransform.position.x, 0, playTransform.position.z);
                 Vector3 position = new Vector3(transform.position.x, 0, transform.position.z);
-                if (Vector3.Distance(playerPosition, position) < 1.5f)
+                if (Vector3.Distance(playerPosition, position) < 1f)
                     if (lastState != FSMState.Attack)
                     {
                         currentState = FSMState.Attack;
@@ -93,7 +97,8 @@ namespace SG
         }
         void FixedUpdate()
         {
-            FSMUpdate();
+
+           FSMUpdate();
         }
 
         void FSMUpdate()
@@ -102,24 +107,38 @@ namespace SG
             switch (currentState)
             {
                 case FSMState.Wander:
+                    setRigidOpen();
                     HandleIdle();
                     break;
                 case FSMState.Seek:
+                    setRigidOpen();
                     HandleSearchPlayer();
                     break;
                 case FSMState.Chase:
+                    setRigidClose();
                     HandleMovement(delta);
                     break;
                 case FSMState.Attack:
+                    setRigidOpen();
                     HandleAttack();
                     break;
             }
             
         }
+        private void setRigidOpen()
+        {
+            if(rigidbody!=null)
+                rigidbody.isKinematic = true;
+        }
+        private void setRigidClose()
+        {
+            if(rigidbody!=null)
+                rigidbody.isKinematic = false;
+        }
         private void HandleSearchPlayer()
         {
             RaycastHit hit;
-            if (Physics.SphereCast(transform.position, 1f, transform.forward, out hit, 2f))
+            if (Physics.SphereCast(transform.position, 1f, transform.forward, out hit, 2f)||Physics.SphereCast(transform.position, 0.5f, -transform.forward, out hit, 0.5f))
             {
                 if (hit.collider.tag == "Player")
                 {
@@ -131,7 +150,9 @@ namespace SG
         }
         private void HandleRotation()
         {
-            Quaternion PlayerRotation = Quaternion.LookRotation(playTransform.position - transform.position);
+            Vector3 playPos = new Vector3(playTransform.position.x,0,playTransform.position.z);
+            Vector3 Pos = new Vector3(transform.position.x,0,transform.position.z);
+            Quaternion PlayerRotation = Quaternion.LookRotation(playPos - Pos);
             transform.rotation = PlayerRotation;
         }
         public void HandleMovement(float delta)
@@ -156,21 +177,47 @@ namespace SG
                 return;
             animatorHandler.UpdateAnimatorValues(0, 0, false);
         }
+        Vector3 tp;
+        Vector3 moveDirection;
         public void HandleLand()
         {         
             RaycastHit hit;
+            
             Vector3 origin = transform.position;
             origin.y += groundDetectionRayStartPoint;
-
-            targetPositon = transform.position;
-            Debug.DrawRay(origin,-Vector3.up * minimunDistanceNeededToBeginFall,Color.red,0.1f,false);
-            if(Physics.Raycast(origin,-Vector3.up,out hit,minimunDistanceNeededToBeginFall))
+            if(Physics.Raycast(origin, transform.forward, out hit,0.4f))
             {
-                Vector3 tp = hit.point;
-                targetPositon.y = tp.y;
+                moveDirection = Vector3.zero;
             }
+            else
+            {
+                moveDirection = transform.forward;
+                moveDirection.Normalize();
+                moveDirection.y = 0;
+            }
+            origin.y += 0.5f;
+            targetPositon = transform.position;
+            Vector3 dir = moveDirection;
+            dir.Normalize();
+            origin = origin + dir * groundDirectionRayDistance;
+            // Debug.DrawRay(origin,-Vector3.up * 0.5f,Color.red,0.1f,false);
+            if(Physics.Raycast(origin,-Vector3.up,out hit,10f,ignoreForGroundCheck))
+            {
+                tp = hit.point;
+                Debug.DrawRay(origin,hit.point-origin,Color.red,0.1f,false);
+            }
+            else
+            {
+                // rigidbody.AddForce(-Vector3.up*fallingSpeed);
+                // // rigidbody.AddForce(dir*fallingSpeed/5f);
+                // fallingSpeed +=9.8f*100;
+            }
+            targetPositon.y = tp.y;
+
+            
             transform.position = targetPositon;
-            print(targetPositon);
+            // print("myTransform");
+            // Debug.Log(transform.position);
         }
     }
 }
