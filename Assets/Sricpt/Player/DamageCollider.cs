@@ -39,14 +39,14 @@ namespace SG
                     playerStates.TakeDamge(currentWeaponDamage);
                 }
             }
-            if(collision.tag == "Enemy")
-            {
-                EnemyStates enemyStates = collision.GetComponent<EnemyStates>();
-                if(enemyStates != null)
-                {
-                    enemyStates.TakeDamge(currentWeaponDamage);
-                }
-            }
+            // if(collision.tag == "Enemy")
+            // {
+            //     EnemyStates enemyStates = collision.GetComponent<EnemyStates>();
+            //     if(enemyStates != null)
+            //     {
+            //         enemyStates.TakeDamge(currentWeaponDamage);
+            //     }
+            // }
         }
     }
 

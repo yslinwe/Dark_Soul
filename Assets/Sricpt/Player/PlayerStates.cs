@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace SG
 {
-    public class PlayerStates : MonoBehaviour
+    public class PlayerStates : CharcterStats
     {
-        public int healthLevel = 10;
-        public int maxHealth;
-        public int currentHealth;
-
-        public int staminaLevel = 10;
-        public int maxStamina;
-        public int currentStamina;
-        public int addStaminaSpeed = 10;
+        public int addStaminaSpeed = 100;
         HealthBar healthBar;
         StaminaBar staminaBar; 
         AnimatorHandler animatorHandler;
+        InputHandler inputHandler;
         private void Awake() {
             healthBar = FindObjectOfType<HealthBar>();
             staminaBar = FindObjectOfType<StaminaBar>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
+            inputHandler = GetComponent<InputHandler>();
         }
         void Start()
         {
@@ -52,13 +47,27 @@ namespace SG
         {
             currentHealth -= damage;
             healthBar.SetCurrentHealth(currentHealth);
-            animatorHandler.PlayTargetAnimation("Damage_01",true);
-            if(currentHealth<=0)
+            if(inputHandler.two_handFlag)
             {
-                currentHealth = 0;
-                animatorHandler.PlayTargetAnimation("Dead_01",true);
-                //Handle Player Death
+                animatorHandler.PlayTargetAnimation("Damage_02",true);
+                if(currentHealth<=0)
+                {
+                    currentHealth = 0;
+                    animatorHandler.PlayTargetAnimation("Dead_02",true);
+                    //Handle Player Death
+                }
             }
+            else
+            {
+                animatorHandler.PlayTargetAnimation("Damage_01",true);
+                if(currentHealth<=0)
+                {
+                    currentHealth = 0;
+                    animatorHandler.PlayTargetAnimation("Dead_01",true);
+                    //Handle Player Death
+                }
+            }
+            
         }
         private int SetMaxStaminaFromHealthLevel()
         {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace SG
 {
-    public class AnimatorHandler : MonoBehaviour
+    public class AnimatorHandler : AnimatorManager
     {
-        public Animator anim;
         InputHandler inputHandler;
         PlayerLocomotion playerLocomotion;
         PlayerManager playerManager;
@@ -77,19 +76,7 @@ namespace SG
             anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
             anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);
         }
-        public void PlayTargetAnimation(string targetAnim, bool isInteracting)
-        {
-            if(targetAnim == null)
-                Debug.LogError("targetAnim is null");
-            if(targetAnim == "")
-                Debug.LogWarning("targetAnim is Empty");
-            if(targetAnim !=""&&targetAnim!=null)
-            {
-                anim.applyRootMotion = isInteracting;
-                anim.SetBool("isInteracting", isInteracting);
-                anim.CrossFade(targetAnim, 0.2f);
-            }
-        }
+ 
         public void CanRotate()
         {
             canRotate = true;

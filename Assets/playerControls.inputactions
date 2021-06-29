@@ -14,6 +14,22 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Lock On Target Left",
+                    "type": "Button",
+                    "id": "1056099d-26db-4b41-a45f-a6d803452dbb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Lock On Target Right",
+                    "type": "Button",
+                    "id": "637a651f-4b6e-45dd-a81e-c6e4a627cad0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Camera",
                     "type": "PassThrough",
                     "id": "61adb6f8-3bf1-481e-8ee5-5fc25f5e5b8b",
@@ -99,6 +115,28 @@
                     "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "145b8d06-5982-4011-a42d-b71594c7c2f4",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Lock On Target Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50663b4d-565c-4c64-a49a-cabe9fc0b828",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Lock On Target Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -106,6 +144,14 @@
             "name": "Player Actions",
             "id": "b84e4c35-9e4d-494b-9fa2-78f3fb97c6d2",
             "actions": [
+                {
+                    "name": "LockOn",
+                    "type": "Button",
+                    "id": "ebd0d4da-874c-4b0c-814c-f8e61559e370",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
                 {
                     "name": "Roll",
                     "type": "Button",
@@ -134,6 +180,14 @@
                     "name": "A",
                     "type": "Button",
                     "id": "9a232c13-94bf-4e3f-b908-2a3090dd8b86",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Y",
+                    "type": "Button",
+                    "id": "98785dcc-cbae-4be4-9b10-47ee337d3f82",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -230,6 +284,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5638962-c768-44c4-b9cc-6ea6e6947d2c",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LockOn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a287a5e6-14c7-4ac3-a1ce-5a7038867cee",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SG
 {
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : CharacterManager
     {
         InputHandler inputHandler;
         Animator anim;
@@ -43,8 +43,9 @@ namespace SG
             anim.SetBool("isInAir",isInAir);
 
             float delta = Time.deltaTime;
+
             inputHandler.TickInput(delta);
-          
+
             playerLocomotion.HandleJumping();
             playerLocomotion.HandleRollingAndSprinting(delta);
             CheckForInteractableObject();
@@ -58,7 +59,6 @@ namespace SG
         }
         private void LateUpdate() {
             inputHandler.rollFlag = false;
-            // inputHandler.sprintFlag = false;
             inputHandler.rb_Input = false;
             inputHandler.rt_Input = false;
             inputHandler.d_Pad_Down = false;
@@ -68,6 +68,7 @@ namespace SG
             inputHandler.a_Input = false;
             inputHandler.jump_Input = false;
             inputHandler.inventory_Input = false;
+            
             float delta = Time.deltaTime;
             if (cameraHandler != null)
             {
@@ -102,6 +103,7 @@ namespace SG
             }
             else
             {
+
                 if(interactableUIGameObject != null)
                 {
                     interactableUIGameObject.SetActive(false);
@@ -119,7 +121,6 @@ namespace SG
         IEnumerator itemInteractableUIGameObjectDisable()
         {
             yield return new WaitForSeconds(3);
-            
             itemInteractableUIGameObject.SetActive(false);
             yield break;
         }

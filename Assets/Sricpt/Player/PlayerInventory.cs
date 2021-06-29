@@ -12,8 +12,8 @@ namespace SG
 
         public List<WeaponItem> weaponsInRightHandSlots;
         public List<WeaponItem> weaponsInLeftHandSlots;
-        public int currentRightWeaponIndex = -1;
-        public int currentLeftWeaponIndex = -1;
+        public int currentRightWeaponIndex = 0;
+        public int currentLeftWeaponIndex = 0;
         public List<WeaponItem> weaponsInventory; 
         private void Awake() {
             weaponSlotManager = GetComponentInChildren<WeaponSlotManager>();
@@ -24,12 +24,15 @@ namespace SG
         }
         public void ChangeRightWeapon()
         {
-            currentRightWeaponIndex = currentRightWeaponIndex + 1;
-            currentRightWeaponIndex = currentRightWeaponIndex%weaponsInRightHandSlots.Count;
-            if(weaponsInRightHandSlots[currentRightWeaponIndex]!=null)
-            {
-                rightWeapon = weaponsInRightHandSlots[currentRightWeaponIndex];
-                weaponSlotManager.LoadWeaponOnSlot(rightWeapon,false);
+            if(weaponsInRightHandSlots.Count>0)
+            {   
+                currentRightWeaponIndex = currentRightWeaponIndex + 1;
+                currentRightWeaponIndex = currentRightWeaponIndex%weaponsInRightHandSlots.Count;
+                if(weaponsInRightHandSlots[currentRightWeaponIndex]!=null)
+                {
+                    rightWeapon = weaponsInRightHandSlots[currentRightWeaponIndex];
+                    weaponSlotManager.LoadWeaponOnSlot(rightWeapon,false);
+                }
             }
             // else if(currentRightWeaponIndex == 0&&weaponsInRightHandSlots[0]==null)
             // {
@@ -53,12 +56,15 @@ namespace SG
         }
         public void ChangeLeftWeapon()
         {
-            currentLeftWeaponIndex = currentLeftWeaponIndex + 1;
-            currentLeftWeaponIndex = currentLeftWeaponIndex%weaponsInLeftHandSlots.Count;
-            if(weaponsInLeftHandSlots[currentLeftWeaponIndex]!=null)
+             if(weaponsInLeftHandSlots.Count>0)
             {
-                leftWeapon = weaponsInLeftHandSlots[currentLeftWeaponIndex];
-                weaponSlotManager.LoadWeaponOnSlot(leftWeapon,true);
+                currentLeftWeaponIndex = currentLeftWeaponIndex + 1;
+                currentLeftWeaponIndex = currentLeftWeaponIndex%weaponsInLeftHandSlots.Count;
+                if(weaponsInLeftHandSlots[currentLeftWeaponIndex]!=null)
+                {
+                    leftWeapon = weaponsInLeftHandSlots[currentLeftWeaponIndex];
+                    weaponSlotManager.LoadWeaponOnSlot(leftWeapon,true);
+                }
             }
             // else if(currentLeftWeaponIndex == 0&&weaponsInLeftHandSlots[0]==null)
             // {

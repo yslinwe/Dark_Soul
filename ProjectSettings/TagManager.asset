@@ -14,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - ignore
-  - 
+  - Character
+  - Enviroment
+  - ignoreForGroundCheck
+  - ignoreForCameraCheck
   - Controller
   - 
   - 

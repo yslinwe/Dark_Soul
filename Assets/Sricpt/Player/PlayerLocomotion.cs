@@ -5,6 +5,7 @@ namespace SG
 {
     public class PlayerLocomotion : MonoBehaviour
     {
+        CameraHandler cameraHandler;
         Transform cameraObject;
         InputHandler inputHandler;
         PlayerManager playerManager;
@@ -33,7 +34,10 @@ namespace SG
         [SerializeField]
         float rotationSpeed = 10;
         [SerializeField]
-        float fallingSpeed = 200;
+        float fallingSpeed = 80;
+        private void Awake() {
+            cameraHandler = FindObjectOfType<CameraHandler>();
+        }
         void Start()
         {
             rigidbody = GetComponent<Rigidbody>();
@@ -52,18 +56,50 @@ namespace SG
         Vector3 targetPositon;
         private void HandleRotation(float delta)
         {
-            Vector3 targetDir = Vector3.zero;
-            float moveOverride = inputHandler.moveAmount;
-            targetDir = cameraObject.forward * inputHandler.vertical;
-            targetDir += cameraObject.right * inputHandler.horizontal;
-            targetDir.Normalize();
-            targetDir.y = 0;
-            if (targetDir == Vector3.zero)
-                targetDir = myTransform.forward;
-            float rs = rotationSpeed;
-            Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
-            myTransform.rotation = targetRotation;
+            if(inputHandler.lockOnFlag)
+           {
+               if(inputHandler.sprintFlag|| inputHandler.rollFlag)
+                {
+                    Vector3 targetDirection = Vector3.zero;
+                    targetDirection = cameraHandler.cameraTransform.forward * inputHandler.vertical;
+                    targetDirection += cameraHandler.cameraTransform.right * inputHandler.horizontal;
+                    targetDirection.Normalize();
+                    targetDirection.y = 0;
+                    if(targetDirection == Vector3.zero)
+                    {
+                        targetDirection = myTransform.forward;
+                    }
+                    Quaternion tr = Quaternion.LookRotation(targetDirection);
+                    Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rotationSpeed * Time.deltaTime);
+
+                    transform.rotation = targetRotation;
+                }
+                else
+                {
+                    Vector3 rotationDiretion = moveDirection;
+                    rotationDiretion = cameraHandler.currentLockOnTarget.position - transform.position;
+                    rotationDiretion.y = 0;
+                    rotationDiretion.Normalize();
+                    Quaternion tr = Quaternion.LookRotation(rotationDiretion);
+                    Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, rotationSpeed * Time.deltaTime);
+                    transform.rotation = targetRotation;
+                }
+           }
+           else
+           {
+                Vector3 targetDir = Vector3.zero;
+                float moveOverride = inputHandler.moveAmount;
+                targetDir = cameraObject.forward * inputHandler.vertical;
+                targetDir += cameraObject.right * inputHandler.horizontal;
+                targetDir.Normalize();
+                targetDir.y = 0;
+                if (targetDir == Vector3.zero)
+                    targetDir = myTransform.forward;
+                float rs = rotationSpeed;
+                Quaternion tr = Quaternion.LookRotation(targetDir);
+                Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
+                myTransform.rotation = targetRotation;
+           }
         }
         public void HandleMovement(float delta)
         {
@@ -89,10 +125,16 @@ namespace SG
                 moveDirection *= speed;
             }
             
-
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
+            if(inputHandler.lockOnFlag && inputHandler.sprintFlag == false)
+            {
+                animatorHandler.UpdateAnimatorValues(inputHandler.vertical , inputHandler.horizontal, playerManager.isSprinting);
+            }
+            else
+            {
+                animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
+            }
             if (animatorHandler.canRotate)
             {
                 HandleRotation(delta);
@@ -129,7 +171,7 @@ namespace SG
             {   
                 rigidbody.AddForce(-Vector3.up*fallingSpeed);
                 rigidbody.AddForce(moveDirection*fallingSpeed/5f);
-                // fallingSpeed +=delta*fallingSpeed;
+                fallingSpeed +=delta*fallingSpeed;
             }
 
             playerManager.isGrounded = false;
@@ -187,7 +229,7 @@ namespace SG
                 // // else
                 // // {
                 // // }
-                // fallingSpeed = 80;
+                fallingSpeed = 80;
             }
                 myTransform.position = targetPositon;
         }

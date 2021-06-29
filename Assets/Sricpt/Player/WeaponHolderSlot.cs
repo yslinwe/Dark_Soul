@@ -6,8 +6,11 @@ namespace SG
     public class WeaponHolderSlot : MonoBehaviour
     {
         public Transform parentOverride;
+        public WeaponItem currentWeaponItem;
         public bool isLeftHandSlot;
         public bool isRightHandSlot;
+        public bool isBackSlot;
+
         public GameObject currentWeaponModel;
         public void UnloadWeapon()
         {

@@ -16,11 +16,12 @@ namespace SG
         }
         public bool upSide(bool state)
         {
-            if(state != upSideLastState&&upSideLastState!=true)
+            if(state != upSideLastState&&upSideLastState==false)
             {
                 upSideLastState = state;
                 return true;
             }
+            upSideLastState = state;
             return false;
         }
         public bool downSide(bool state)
@@ -30,6 +31,7 @@ namespace SG
                 downSideLastState = state;
                 return true;
             }
+            downSideLastState = state;
             return false;
         }
     }
