@@ -14,12 +14,17 @@ namespace SG
             //if in attack range return attack State
             //if we are in a cool down after attacking, return this state and continue circling player
             //if the player runs out of range return the pursuetarget state
-            enemyManager.distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
-            if(enemyManager.currentRecoveryTime <=0 && enemyManager.distanceFromTarget <= enemyManager.maxmunAttackingRange)
+            if(enemyManager.isPerformingaction)
+            {
+                enemyAninmatorManager.anim.SetFloat("Vertical",0,0.1f,Time.deltaTime);
+            }
+            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            
+            if(enemyManager.currentRecoveryTime <=0 && distanceFromTarget <= enemyManager.maxmunAttackingRange)
             {
                 return attackState;
             }
-            else if(enemyManager.distanceFromTarget > enemyManager.maxmunAttackingRange)
+            else if(distanceFromTarget > enemyManager.maxmunAttackingRange)
             {
                return pursueTargetState;
             }

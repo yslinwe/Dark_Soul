@@ -48,8 +48,8 @@ namespace SG
             enemyStates = GetComponent<EnemyStates>();
             rigidbody = GetComponent<Rigidbody>();
             enemyWeaponSlotManager = GetComponentInChildren<EnemyWeaponSlotManager>();
-            enemyWeaponSlotManager.LoadWeaponOnSlot(false);
-            ignoreForGroundCheck = ~(1<<8);
+            //enemyWeaponSlotManager.LoadWeaponOnSlot(false);
+            ignoreForGroundCheck = ~(1<<8 | 1<<11);
             myTransform = transform;
             myTransformPos = transform.position;
         }

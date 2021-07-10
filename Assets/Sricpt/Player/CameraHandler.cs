@@ -47,7 +47,7 @@ namespace SG
             singleton = this;
             myTransform = transform;
             defaultPosition = cameraTransform.localPosition.z;
-            ignoreLayers = ~(1 << 9);
+            ignoreLayers = ~(1 << 9|1 << 12|1<<11|1<<6);
             targetTransform = FindObjectOfType<PlayerManager>().transform;
             inputHandler = FindObjectOfType<InputHandler>();
             playerManager = FindObjectOfType<PlayerManager>();

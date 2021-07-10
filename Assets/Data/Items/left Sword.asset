@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bd57b6ae09f86e4d99f50f77540027a, type: 3}
-  m_Name: left Sword
+  m_Name: Left Sword
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 21300000, guid: 15439f3330d9ff543a541a1f894d605e, type: 3}
   itemName: Sword
@@ -20,9 +20,9 @@ MonoBehaviour:
   right_hand_idle: Right_Arm_Idle_01
   left_hand_idle: Left_Arm_Idle_01
   two_hand_idle: TH_idle_01
-  OH_Light_Attack_1: OH_Light_Attack_01
-  OH_Light_Attack_2: OH_Light_Attack_02
-  OH_Heavy_Attack_1: OH_Heavy_Attack_01
+  OH_Light_Attack_1: OH_Light_Attack_011
+  OH_Light_Attack_2: OH_Light_Attack_022
+  OH_Heavy_Attack_1: OH_Heavy_Attack_011
   TH_Sword_Attack_01: TH_Sword_Attack_01
   TH_Sword_Attack_02: TH_Sword_Attack_02
   TH_Sword_Attack_03: TH_Sword_Attack_03

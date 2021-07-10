@@ -10,6 +10,14 @@ namespace  SG
             anim = GetComponent<Animator>();
             enemyManager = GetComponentInParent<EnemyManager>();
         }
+        public void EnaleCombo()
+        {
+            anim.SetBool("canDoCombo",true);
+        }
+        public void DisableCombo()
+        {
+            anim.SetBool("canDoCombo",false);
+        }
         private void OnAnimatorMove() {
             float delta = Time.deltaTime;
             enemyManager.enemyRigidBody.drag = 0;

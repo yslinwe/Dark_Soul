@@ -14,7 +14,8 @@ namespace SG
         public Transform myTransform;
         [HideInInspector]
         public AnimatorHandler animatorHandler;
-
+        public CapsuleCollider CharacterCollider;
+        public CapsuleCollider CharacterColliderBlocker;
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
         [Header("Ground & Air Detection Stats")]
@@ -48,7 +49,8 @@ namespace SG
             myTransform = transform;
             animatorHandler.Initialize();
             playerManager.isGrounded = true;
-            ignoreForGroundCheck = ~(1<<8);
+            ignoreForGroundCheck = ~(1<<8 | 1<<6| 1<<11);
+            Physics.IgnoreCollision(CharacterCollider,CharacterColliderBlocker,true);
         }
        
         #region Movement

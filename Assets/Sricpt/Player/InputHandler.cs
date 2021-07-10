@@ -15,6 +15,8 @@ namespace SG
         public bool y_Input;
         public bool rb_Input;
         public bool rt_Input;
+        public bool lb_Input;
+        public bool lt_Input;
         public bool jump_Input;
         public bool inventory_Input;
         public bool lockOnInput;
@@ -35,6 +37,7 @@ namespace SG
         public float rollInputTimer;
         
         PlayerControls inputActions;
+        AnimatorHandler animatorHandler; 
         PlayerAttacker playerAttacker;
         PlayerInventory playerInventory;
         PlayerManager playerManager;
@@ -52,6 +55,7 @@ namespace SG
             weaponSlotManager = GetComponentInChildren<WeaponSlotManager>();
             uiManage = FindObjectOfType<UIManage>();
             cameraHandler = FindObjectOfType<CameraHandler>();
+            animatorHandler = GetComponentInChildren<AnimatorHandler>();
         }
         public void OnEnable()
         {
@@ -63,6 +67,9 @@ namespace SG
 
                 inputActions.PlayerActions.RB.performed += i => rb_Input = true;
                 inputActions.PlayerActions.RT.performed += i => rt_Input = true;
+                inputActions.PlayerActions.LB.performed += i => lb_Input = true;
+                inputActions.PlayerActions.LT.performed += i => lt_Input = true;
+
                 inputActions.PlayerQuickSlots.DPadRight.performed += i => d_Pad_Right = true;
                 inputActions.PlayerQuickSlots.DPadLeft.performed += i => d_Pad_Left = true; 
                 HandleInteractingButtonInput();
@@ -120,31 +127,51 @@ namespace SG
         }
         private void HandleAttackInput(float delta)
         {
-            if(rb_Input)
-            {   
-                int needStamina = Mathf.RoundToInt(playerInventory.rightWeapon.baseStamina*playerInventory.rightWeapon.lightAttackMultiplier);
-                if(playerStates.currentStamina>needStamina)
-                if(playerManager.canDoCombo)
-                {
-                    comboFlag = true;
-                    playerAttacker.HandleWeaponCombo(playerInventory.rightWeapon);
-                    comboFlag = false;
-                }
-                else
-                {
-                    if(playerManager.isInteracting || playerManager.canDoCombo)
-                        return;
-                    playerAttacker.HandleLightAttack(playerInventory.rightWeapon);
-                }
-            }
             if(rt_Input)
             {
-                int needStamina = Mathf.RoundToInt(playerInventory.rightWeapon.baseStamina*playerInventory.rightWeapon.heavyAttackMultiplier);
-                if(playerStates.currentStamina>needStamina)
+                animatorHandler.anim.SetBool("isRight",true);
+                HandleHeavyAttackInput(playerInventory.rightWeapon);
+            }
+            else if(lt_Input)
+            {
+                animatorHandler.anim.SetBool("isLeft",true);
+                HandleHeavyAttackInput(playerInventory.leftWeapon);
+            }
+            if(rb_Input)
+            {   
+                animatorHandler.anim.SetBool("isRight",true);
+                HandleLightAttackInput(playerInventory.rightWeapon);
+            }
+            else if(lb_Input)
+            {
+                animatorHandler.anim.SetBool("isLeft",true);
+                HandleLightAttackInput(playerInventory.leftWeapon);
+            }
+        }
+        private void HandleHeavyAttackInput(WeaponItem weaponItem)
+        {
+            int needStamina = Mathf.RoundToInt(weaponItem.baseStamina*weaponItem.heavyAttackMultiplier);
+            if(playerStates.currentStamina>needStamina)
+            if(playerManager.isInteracting || playerManager.canDoCombo)
+                return;
+            if(playerManager.isInteracting!=true)
+                playerAttacker.HandleHeavyAttack(weaponItem);
+        }
+        private void HandleLightAttackInput(WeaponItem weaponItem)
+        {
+            int needStamina = Mathf.RoundToInt(weaponItem.baseStamina*weaponItem.lightAttackMultiplier);
+            if(playerStates.currentStamina>needStamina)
+            if(playerManager.canDoCombo)
+            {
+                comboFlag = true;
+                playerAttacker.HandleWeaponCombo(weaponItem);
+                comboFlag = false;
+            }
+            else
+            {
                 if(playerManager.isInteracting || playerManager.canDoCombo)
                     return;
-                if(playerManager.isInteracting!=true)
-                    playerAttacker.HandleHeavyAttack(playerInventory.rightWeapon);
+                playerAttacker.HandleLightAttack(weaponItem);
             }
         }
         private void HandleQuickSlotsInput()

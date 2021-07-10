@@ -21,20 +21,23 @@ namespace SG
         #region Attacks
         private State AttackTarget(EnemyManager enemyManager,EnemyAninmatorManager enemyAninmatorManager)
         {
-            // Vector3 targetDirection = enemyManager.currentTarget.transform.position - transform.position;
-            // float viewableAngle = Vector3.Angle(targetDirection, transform.forward);
             if(enemyManager.isPerformingaction)
                 return combaStanceState;
+
+            Vector3 targetsDirection = enemyManager.currentTarget.transform.position - transform.position;
+            float viewableAngle = Vector3.Angle(targetsDirection,transform.forward);
+            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+
             if(currentAttack != null)
             {
-                if(enemyManager.distanceFromTarget < currentAttack.minmumDistanceNeededToAttack)
+                if(distanceFromTarget < currentAttack.minmumDistanceNeededToAttack)
                 {
                     return this;
                 }
-                else if(enemyManager.distanceFromTarget < currentAttack.maxmumDistanceNeededToAttack)
+                else if(distanceFromTarget < currentAttack.maxmumDistanceNeededToAttack)
                 {
-                    if(enemyManager.viewableAngle <= currentAttack.maximumAttackAngle 
-                    && enemyManager.viewableAngle >= currentAttack.minimunAttackAngle)
+                    if(viewableAngle <= currentAttack.maximumAttackAngle 
+                    && viewableAngle >= currentAttack.minimunAttackAngle)
                     {
                         if(enemyManager.currentRecoveryTime <= 0 && enemyManager.isPerformingaction == false)
                         {
@@ -51,22 +54,20 @@ namespace SG
             }
             else
             {
-                GetNewAttack(enemyManager);
+                GetNewAttack(enemyManager, distanceFromTarget, viewableAngle);
             }
             return combaStanceState;
         }
-        private void GetNewAttack(EnemyManager enemyManager)
+        private void GetNewAttack(EnemyManager enemyManager, float distanceFromTarget, float viewableAngle)
         {
-            Vector3 targetsDirection = enemyManager.currentTarget.transform.position - transform.position;
-            float viewableAngle = Vector3.Angle(targetsDirection,transform.forward);
-            enemyManager.distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position,transform.position);
+           
 
             int maxScore = 0;
             for (int i = 0; i < enemyAttackActions.Length; i++)
             {
                 EnemyAttackAction enemyAttackAction = enemyAttackActions[i];
-                if(enemyManager.distanceFromTarget <= enemyAttackAction.maxmumDistanceNeededToAttack
-                && enemyManager.distanceFromTarget > enemyAttackAction.minmumDistanceNeededToAttack)
+                if(distanceFromTarget <= enemyAttackAction.maxmumDistanceNeededToAttack
+                && distanceFromTarget > enemyAttackAction.minmumDistanceNeededToAttack)
                 {
                     if(viewableAngle <= enemyAttackAction.maximumAttackAngle
                     && viewableAngle >= enemyAttackAction.minimunAttackAngle)
@@ -80,8 +81,8 @@ namespace SG
             for (int i = 0; i < enemyAttackActions.Length; i++)
             {
                 EnemyAttackAction enemyAttackAction = enemyAttackActions[i];
-                if(enemyManager.distanceFromTarget <= enemyAttackAction.maxmumDistanceNeededToAttack
-                && enemyManager.distanceFromTarget > enemyAttackAction.minmumDistanceNeededToAttack)
+                if(distanceFromTarget <= enemyAttackAction.maxmumDistanceNeededToAttack
+                && distanceFromTarget > enemyAttackAction.minmumDistanceNeededToAttack)
                 {
                     if(viewableAngle <= enemyAttackAction.maximumAttackAngle
                     && viewableAngle >= enemyAttackAction.minimunAttackAngle)

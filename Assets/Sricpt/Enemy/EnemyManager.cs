@@ -16,15 +16,14 @@ namespace SG
         public Rigidbody enemyRigidBody;
 
         public bool isPerformingaction;
+        public bool isInteracting;
         public float rotateSpeed = 15f;
-        public float distanceFromTarget;
         public float maxmunAttackingRange = 1.5f;
         [Header("A.I Settings")]
         public float detectionRadius = 20;
         // The higher and lower respectively angles are,the greater detection FIELD OF VIEW(basically like eye sight)
         public float maximumDetectionAngle = 50;
         public float minimumDetectionAngle = -50;
-        public float viewableAngle;
         public float currentRecoveryTime = 0;
         private void Awake() {
             enemyLocomotionManager = GetComponent<EnemyLocomotionManager>();
@@ -39,6 +38,7 @@ namespace SG
         }
         private void Update() {
             HandleRecoveryTimer();
+            isInteracting = enemyAninmatorManager.anim.GetBool("isInteracting");
         }
         private void FixedUpdate() {
             HandleStateMachine();

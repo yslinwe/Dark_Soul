@@ -19,8 +19,8 @@ TagManager:
   - ignoreForGroundCheck
   - ignoreForCameraCheck
   - Controller
-  - 
-  - 
+  - Character Collider Blocker
+  - Enemy
   - 
   - 
   - 

@@ -45,6 +45,8 @@ namespace SG
         
         public void TakeDamge(int damage)
         {
+            if(isDead)
+                return;
             currentHealth -= damage;
             healthBar.SetCurrentHealth(currentHealth);
             if(inputHandler.two_handFlag)
@@ -54,6 +56,7 @@ namespace SG
                 {
                     currentHealth = 0;
                     animatorHandler.PlayTargetAnimation("Dead_02",true);
+                    isDead = true;
                     //Handle Player Death
                 }
             }
@@ -64,6 +67,7 @@ namespace SG
                 {
                     currentHealth = 0;
                     animatorHandler.PlayTargetAnimation("Dead_01",true);
+                    isDead = true;
                     //Handle Player Death
                 }
             }

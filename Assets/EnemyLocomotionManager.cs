@@ -8,10 +8,12 @@ namespace SG
     {
         EnemyManager enemyManager;
         EnemyAninmatorManager enemyAninmatorManager;
-
+        public CapsuleCollider CharacterCollider;
+        public CapsuleCollider CharacterColliderBlocker;
         private void Awake() {
             enemyManager = GetComponent<EnemyManager>();
             enemyAninmatorManager = GetComponentInChildren<EnemyAninmatorManager>();
+            Physics.IgnoreCollision(CharacterCollider,CharacterColliderBlocker,true);
         }
     }
 }

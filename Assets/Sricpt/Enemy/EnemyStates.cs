@@ -7,10 +7,10 @@ namespace SG
     {
         Animator animator;
         // public HealthBar healthBar;
-        AnimatorHandler animatorHandler;
+        EnemyAninmatorManager animatorHandler;
         private void Awake()
         {
-            animatorHandler = GetComponentInChildren<AnimatorHandler>();
+            animatorHandler = GetComponentInChildren<EnemyAninmatorManager>();
         }
         void Start()
         {
@@ -23,6 +23,21 @@ namespace SG
             maxHealth = healthLevel * 10;
             return maxHealth;
         }
+        public void TakeDamge(int damage)
+        {
+            if(isDead)
+                return;
+            currentHealth -= damage;
+            animatorHandler.PlayTargetAnimation("Damage_01",true);
+            if(currentHealth<=0)
+            {
+                currentHealth = 0;
+                animatorHandler.PlayTargetAnimation("Dead_01",true);
+                isDead = true;
+                //Handle Player Death
+            }
+        }
+
        
     }
 

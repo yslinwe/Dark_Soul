@@ -97,19 +97,46 @@ namespace SG
         {
             rightHandDamageCollider = rightHandSlot.currentWeaponModel.GetComponentInChildren<DamageCollider>();
         }
-        public void OpenRightDamageCollider()
+        public void OpenDamageCollider()
+        {
+            bool isLeft = animator.GetBool("isLeft");
+            bool isRight = animator.GetBool("isRight");
+            if(isRight)
+            {
+                OpenRightDamageCollider();
+            }
+            else if(isLeft)
+            {
+                OpenLeftDamageCollider();
+            }
+        }
+        public void CloseDamageCollider()
+        {
+            bool isLeft = animator.GetBool("isLeft");
+            bool isRight = animator.GetBool("isRight");
+            print(isRight);
+            if(isRight)
+            {
+                CloseRightHandDamageCollider();
+            }
+            else if(isLeft)
+            {
+                CloseLeftHandDamageCollider();
+            }
+        }
+        private void OpenRightDamageCollider()
         {
             rightHandDamageCollider.EnableDamageCollider();
         }
-        public void OpenLeftDamageCollider()
+        private void OpenLeftDamageCollider()
         {
             leftHandDamageCollider.EnableDamageCollider();
         }
-        public void CloseRightHandDamageCollider()
+        private void CloseRightHandDamageCollider()
         {
             rightHandDamageCollider.DisableDamageCollider();
         }
-        public void CloseLeftHandDamageCollider()
+        private void CloseLeftHandDamageCollider()
         {
             leftHandDamageCollider.DisableDamageCollider();
         }
