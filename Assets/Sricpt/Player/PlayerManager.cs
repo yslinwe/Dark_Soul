@@ -9,6 +9,7 @@ namespace SG
         InputHandler inputHandler;
         Animator anim;
         CameraHandler cameraHandler;
+        PlayerStates playerStates;
         PlayerLocomotion playerLocomotion;
         InteractableUI interactableUI;
         public GameObject interactableUIGameObject;
@@ -19,10 +20,11 @@ namespace SG
         public bool isGrounded;
         public bool isInteracting;
         public bool canDoCombo;
+        public bool isInvulerable;
         private MyTools tools;
         private void Awake()
         {
-            // Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
             tools = new MyTools();
             
         }
@@ -33,6 +35,7 @@ namespace SG
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
+            playerStates = GetComponent<PlayerStates>();
         }
 
         // Update is called once per frame
@@ -40,6 +43,7 @@ namespace SG
         {
             isInteracting = anim.GetBool("isInteracting");
             canDoCombo = anim.GetBool("canDoCombo");
+            isInvulerable = anim.GetBool("isInvulerable");
             anim.SetBool("isInAir",isInAir);
 
             float delta = Time.deltaTime;
@@ -48,6 +52,7 @@ namespace SG
 
             playerLocomotion.HandleJumping();
             playerLocomotion.HandleRollingAndSprinting(delta);
+            playerStates.RegenerateStamina();
             CheckForInteractableObject();
          
         }

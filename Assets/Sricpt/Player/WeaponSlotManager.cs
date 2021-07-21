@@ -114,7 +114,6 @@ namespace SG
         {
             bool isLeft = animator.GetBool("isLeft");
             bool isRight = animator.GetBool("isRight");
-            print(isRight);
             if(isRight)
             {
                 CloseRightHandDamageCollider();

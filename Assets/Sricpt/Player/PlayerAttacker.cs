@@ -8,12 +8,19 @@ namespace SG
         AnimatorHandler animatorHandler;
         InputHandler inputHandler;
         WeaponSlotManager weaponSlotManager;
+        PlayerManager playerManager;
+        PlayerStates playerStates;
+        PlayerInventory playerInventory;
         public string lastAttack;
+        
         private void Awake()
         {
-            animatorHandler = GetComponentInChildren<AnimatorHandler>();
-            inputHandler = GetComponent<InputHandler>();
-            weaponSlotManager = GetComponentInChildren<WeaponSlotManager>();
+            animatorHandler = GetComponent<AnimatorHandler>();
+            playerManager = GetComponentInParent<PlayerManager>();
+            playerInventory = GetComponentInParent<PlayerInventory>();
+            playerStates = GetComponentInParent<PlayerStates>();
+            inputHandler = GetComponentInParent<InputHandler>();
+            weaponSlotManager = GetComponent<WeaponSlotManager>();
         }
         public void HandleWeaponCombo(WeaponItem weapon)
         {
@@ -59,6 +66,61 @@ namespace SG
                 lastAttack = weapon.OH_Heavy_Attack_1;
             }
         }
+        #region Input Actions
+        public void HandleRBAction(WeaponItem weaponItem)
+        {
+            switch (weaponItem.weaponType)
+            {
+                case WeaponType.isMeleeWeapon: PerformRBMeleeAction(weaponItem); break;
+                case WeaponType.isSpellCaster: 
+                case WeaponType.isFaithCaster:
+                case WeaponType.isPyroCaster: PerformRBMagicAction(weaponItem); break;;
+                default: break;
+            }
+        }
+        #endregion
+        #region  Attack Action
+        private void PerformRBMeleeAction(WeaponItem weaponItem)
+        {
+            int needStamina = Mathf.RoundToInt(weaponItem.baseStamina*weaponItem.lightAttackMultiplier);
+            if(playerStates.currentStamina>needStamina)
+            if(playerManager.canDoCombo)
+            {
+                inputHandler.comboFlag = true;
+                HandleWeaponCombo(weaponItem);
+                inputHandler.comboFlag = false;
+            }
+            else
+            {
+                if(playerManager.isInteracting || playerManager.canDoCombo)
+                    return;
+                HandleLightAttack(weaponItem);
+            }
+        }
+        private void PerformRBMagicAction(WeaponItem weaponItem)
+        {
+            if(weaponItem.weaponType == WeaponType.isFaithCaster)
+            {
+                if(playerInventory.currentSpell != null && playerInventory.currentSpell.isFaithSpell)
+                {
+                    playerInventory.currentSpell.AttemptToCastSpell(animatorHandler, playerStates);
+                }
+            }
+        }
+        private void SuccessfullyCastSpell()
+        {
+            playerInventory.currentSpell.SuccessfullyCastSpell(animatorHandler,playerStates);
+        }
+        public void HandleHeavyAttackAction(WeaponItem weaponItem)
+        {
+            int needStamina = Mathf.RoundToInt(weaponItem.baseStamina*weaponItem.heavyAttackMultiplier);
+            if(playerStates.currentStamina>needStamina)
+            if(playerManager.isInteracting || playerManager.canDoCombo)
+                return;
+            if(playerManager.isInteracting!=true)
+                HandleHeavyAttack(weaponItem);
+        }
+        #endregion
     }
 }
 

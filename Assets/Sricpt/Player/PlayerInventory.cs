@@ -6,6 +6,7 @@ namespace SG
     public class PlayerInventory : MonoBehaviour
     {
         WeaponSlotManager weaponSlotManager;
+        public SpellItem currentSpell;
         public WeaponItem rightWeapon;
         public WeaponItem leftWeapon;
         public WeaponItem unanmedWeapon;

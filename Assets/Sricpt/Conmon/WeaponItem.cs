@@ -3,6 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace SG
 {
+    public enum WeaponType
+    {
+        isSpellCaster,
+        isFaithCaster,
+        isPyroCaster,
+        isMeleeWeapon,
+    }
+    public enum WeaponHand
+    {
+        isRightHand,
+        isLeftHand,
+        isTwoHand,
+        Unarmed,
+    }
     [CreateAssetMenu(menuName = "Items/Weapon Item")]
     public class WeaponItem : Item
     {
@@ -24,6 +38,9 @@ namespace SG
         public int baseStamina;
         public float lightAttackMultiplier;
         public float heavyAttackMultiplier;
+        [Header("Weapon Type")]
+        public WeaponType weaponType;
+        public WeaponHand weaponHand;
     }
 
 }

@@ -93,6 +93,14 @@ namespace SG
         {
             anim.SetBool("canDoCombo",false);
         }
+        public void EnableIsInvulerable()
+        {
+            anim.SetBool("isInvulerable",true);
+        }
+        public void DisableIsInvulerable()
+        {
+            anim.SetBool("isInvulerable",false);
+        }
         private void OnAnimatorMove()
         {
             if (playerManager.isInteracting == false)
