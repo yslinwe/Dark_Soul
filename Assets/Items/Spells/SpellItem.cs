@@ -8,6 +8,9 @@ namespace  SG
         public GameObject spellWarmUpFX;
         public GameObject spellCastFX;
         public string spellAnimation;
+        [Header("Spell Cost")]
+        public int focusPointCost;
+
         [Header("Spell Type")]
         public bool isFaithSpell;
         public bool isMagicSpell;
@@ -23,6 +26,7 @@ namespace  SG
         public virtual void SuccessfullyCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
         {
             Debug.Log("You successfully cast a spell!");
+            playerStates.DeDuctFocusPoints(focusPointCost);
         }
     }
     

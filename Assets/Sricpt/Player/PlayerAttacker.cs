@@ -99,11 +99,21 @@ namespace SG
         }
         private void PerformRBMagicAction(WeaponItem weaponItem)
         {
+            if(playerManager.isInteracting) 
+                return;
+                
             if(weaponItem.weaponType == WeaponType.isFaithCaster)
             {
                 if(playerInventory.currentSpell != null && playerInventory.currentSpell.isFaithSpell)
                 {
-                    playerInventory.currentSpell.AttemptToCastSpell(animatorHandler, playerStates);
+                    if(playerStates.currentFocusPoints >= playerInventory.currentSpell.focusPointCost)
+                    {
+                        playerInventory.currentSpell.AttemptToCastSpell(animatorHandler, playerStates);
+                    }
+                    else
+                    {
+                        animatorHandler.PlayTargetAnimation("Shrug",true);
+                    }
                 }
             }
         }

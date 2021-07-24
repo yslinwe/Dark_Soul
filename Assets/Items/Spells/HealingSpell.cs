@@ -9,6 +9,7 @@ namespace SG
         public int healAmount;
         public override void AttemptToCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
         {
+            base.AttemptToCastSpell(animatorHandler,playerStates);
             GameObject instantiateWarmUpSpellFX = Instantiate(spellWarmUpFX, animatorHandler.transform);
             animatorHandler.PlayTargetAnimation(spellAnimation,true);
             Destroy(instantiateWarmUpSpellFX,1);
@@ -16,6 +17,7 @@ namespace SG
         }
         public override void SuccessfullyCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
         {
+            base.SuccessfullyCastSpell(animatorHandler,playerStates);
             GameObject instantiatedSpellFX = Instantiate(spellCastFX, animatorHandler.transform);
             playerStates.HealPlayer(healAmount);
             Destroy(instantiatedSpellFX,1);

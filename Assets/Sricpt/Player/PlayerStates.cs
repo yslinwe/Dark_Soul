@@ -9,6 +9,7 @@ namespace SG
         PlayerManager playerManager;
         HealthBar healthBar;
         StaminaBar staminaBar; 
+        FocusPointBar focusPointBar;
         AnimatorHandler animatorHandler;
         InputHandler inputHandler;
         public float staminaRegenerationAmount = 30;
@@ -17,6 +18,7 @@ namespace SG
             playerManager = GetComponent<PlayerManager>();
             healthBar = FindObjectOfType<HealthBar>();
             staminaBar = FindObjectOfType<StaminaBar>();
+            focusPointBar = FindObjectOfType<FocusPointBar>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
             inputHandler = GetComponent<InputHandler>();
         }
@@ -26,16 +28,14 @@ namespace SG
             currentHealth = maxHealth;
             healthBar.SetMaxHealth(maxHealth);
             
-            maxStamina = SetMaxStaminaFromHealthLevel();
+            maxStamina = SetMaxStaminaFromStaminaLevel();
             currentStamina = maxStamina;
             staminaBar.SetMaxStamina(maxStamina);
+
+            maxFocusPoints = SetMaxFocusPointsFromFocusPointsLevel();
+            currentFocusPoints = maxFocusPoints;
+            focusPointBar.SetMaxFocusPoints(maxFocusPoints);
         }
-        private int SetMaxHealthFromHealthLevel()
-        {
-            maxHealth = healthLevel * 10;
-            return maxHealth;
-        }
-        
         public void TakeDamge(int damage)
         {
             if(playerManager.isInvulerable)
@@ -68,7 +68,17 @@ namespace SG
             }
             
         }
-        private float SetMaxStaminaFromHealthLevel()
+        private int SetMaxHealthFromHealthLevel()
+        {
+            maxHealth = healthLevel * 10;
+            return maxHealth;
+        }
+        private float SetMaxFocusPointsFromFocusPointsLevel()
+        {
+            maxFocusPoints = focusPontsLevel * 10;
+            return maxFocusPoints;
+        }
+        private float SetMaxStaminaFromStaminaLevel()
         {
             maxStamina = staminaLevel * 10;
             return maxStamina;
@@ -105,6 +115,16 @@ namespace SG
             }
             healthBar.SetCurrentHealth(currentHealth);
         }
+        public void DeDuctFocusPoints(int focusPoints)
+        {
+            currentFocusPoints = currentFocusPoints - focusPoints;
+            if(currentFocusPoints<0)
+            {
+                currentFocusPoints = 0;
+            }
+            focusPointBar.SetCurrentFocusPoints(currentFocusPoints);
+        }
+
     }
 
 }

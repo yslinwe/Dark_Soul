@@ -19,6 +19,7 @@ MonoBehaviour:
   spellCastFX: {fileID: 8610547195930401698, guid: 4c9efb2d3b302be459053c3256969fc4,
     type: 3}
   spellAnimation: HealDrinking
+  focusPointCost: 30
   isFaithSpell: 1
   isMagicSpell: 0
   isPyroSpell: 0
