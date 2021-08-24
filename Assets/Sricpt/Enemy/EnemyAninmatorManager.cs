@@ -6,9 +6,11 @@ namespace  SG
     public class EnemyAninmatorManager : AnimatorManager
     {
         EnemyManager enemyManager;
+        EnemyStates enemyStates;
         private void Awake() {
             anim = GetComponent<Animator>();
             enemyManager = GetComponentInParent<EnemyManager>();
+            enemyStates = GetComponentInParent<EnemyStates>();
         }
         public void EnaleCombo()
         {
@@ -17,6 +19,11 @@ namespace  SG
         public void DisableCombo()
         {
             anim.SetBool("canDoCombo",false);
+        }
+        public override void TakeCriticalDamageAnimationEvent()
+        {
+            enemyStates.TakeDamageNoAnimation(enemyManager.pendingCriticalDamage);
+            enemyManager.pendingCriticalDamage = 0;
         }
         private void OnAnimatorMove() {
             float delta = Time.deltaTime;

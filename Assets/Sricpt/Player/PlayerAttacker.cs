@@ -5,7 +5,7 @@ namespace SG
 {
     public class PlayerAttacker : MonoBehaviour
     {
-        AnimatorHandler animatorHandler;
+        PlayerAnimatorManager animatorHandler;
         InputHandler inputHandler;
         WeaponSlotManager weaponSlotManager;
         PlayerManager playerManager;
@@ -13,9 +13,10 @@ namespace SG
         PlayerInventory playerInventory;
         public string lastAttack;
         
+        LayerMask backStabLayer = 1<<13;
         private void Awake()
         {
-            animatorHandler = GetComponent<AnimatorHandler>();
+            animatorHandler = GetComponent<PlayerAnimatorManager>();
             playerManager = GetComponentInParent<PlayerManager>();
             playerInventory = GetComponentInParent<PlayerInventory>();
             playerStates = GetComponentInParent<PlayerStates>();
@@ -97,7 +98,7 @@ namespace SG
                 HandleLightAttack(weaponItem);
             }
         }
-        private void PerformRBMagicAction(WeaponItem weaponItem)
+           private void PerformRBMagicAction(WeaponItem weaponItem)
         {
             if(playerManager.isInteracting) 
                 return;
@@ -131,6 +132,35 @@ namespace SG
                 HandleHeavyAttack(weaponItem);
         }
         #endregion
+        public void AttemptBackStabOrRiposte()
+        {
+            if(playerManager.isInteracting) 
+                return;
+            RaycastHit hit;
+            if(Physics.Raycast(inputHandler.criticalAttackRayCastStartPoint.position,
+            transform.TransformDirection(Vector3.forward),out hit , 0.5f,backStabLayer))
+            {
+                CharacterManager enemyCharacterManager = hit.transform.gameObject.GetComponentInParent<CharacterManager>();
+                DamageCollider rightDamageCollider = weaponSlotManager.rightHandDamageCollider;
+                if(enemyCharacterManager != null)
+                {
+                    playerManager.transform.position  = enemyCharacterManager.backStabCollider.backStabberStandPoint.position;
+                    Vector3 rotationDirection = playerManager.transform.root.eulerAngles;
+                    rotationDirection = hit.transform.position - playerManager.transform.position;
+                    rotationDirection.y = 0;
+                    rotationDirection.Normalize();
+                    Quaternion tr = Quaternion.LookRotation(rotationDirection);
+                    Quaternion targetRotation = Quaternion.Slerp(playerManager.transform.rotation, tr, 500 * Time.deltaTime);
+                    playerManager.transform.rotation = targetRotation;
+                    
+                    int criticalDamage = playerInventory.rightWeapon.criticalDamageMuiltiplier * rightDamageCollider.currentWeaponDamage;
+                    enemyCharacterManager.pendingCriticalDamage = criticalDamage;
+
+                    animatorHandler.PlayTargetAnimation("Back Stab", true);
+                    enemyCharacterManager.GetComponentInChildren<AnimatorManager>().PlayTargetAnimation("Back Stabbed", true);
+                }
+            }
+        }
     }
 }
 

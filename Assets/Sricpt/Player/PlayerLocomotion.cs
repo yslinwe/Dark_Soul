@@ -13,7 +13,7 @@ namespace SG
         [HideInInspector]
         public Transform myTransform;
         [HideInInspector]
-        public AnimatorHandler animatorHandler;
+        public PlayerAnimatorManager animatorHandler;
         public CapsuleCollider CharacterCollider;
         public CapsuleCollider CharacterColliderBlocker;
         public new Rigidbody rigidbody;
@@ -45,7 +45,7 @@ namespace SG
             inputHandler = GetComponent<InputHandler>();
             playerManager = GetComponent<PlayerManager>();
             cameraObject = Camera.main.transform;
-            animatorHandler = GetComponentInChildren<AnimatorHandler>();
+            animatorHandler = GetComponentInChildren<PlayerAnimatorManager>();
             myTransform = transform;
             animatorHandler.Initialize();
             playerManager.isGrounded = true;
@@ -56,52 +56,55 @@ namespace SG
         #region Movement
         Vector3 normalVector;
         Vector3 targetPositon;
-        private void HandleRotation(float delta)
+        public void HandleRotation(float delta)
         {
-            if(inputHandler.lockOnFlag)
-           {
-               if(inputHandler.sprintFlag|| inputHandler.rollFlag)
+            if(animatorHandler.canRotate)
+            {
+                if(inputHandler.lockOnFlag)
                 {
-                    Vector3 targetDirection = Vector3.zero;
-                    targetDirection = cameraHandler.cameraTransform.forward * inputHandler.vertical;
-                    targetDirection += cameraHandler.cameraTransform.right * inputHandler.horizontal;
-                    targetDirection.Normalize();
-                    targetDirection.y = 0;
-                    if(targetDirection == Vector3.zero)
-                    {
-                        targetDirection = myTransform.forward;
-                    }
-                    Quaternion tr = Quaternion.LookRotation(targetDirection);
-                    Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rotationSpeed * Time.deltaTime);
+                    if(inputHandler.sprintFlag|| inputHandler.rollFlag)
+                        {
+                            Vector3 targetDirection = Vector3.zero;
+                            targetDirection = cameraHandler.cameraTransform.forward * inputHandler.vertical;
+                            targetDirection += cameraHandler.cameraTransform.right * inputHandler.horizontal;
+                            targetDirection.Normalize();
+                            targetDirection.y = 0;
+                            if(targetDirection == Vector3.zero)
+                            {
+                                targetDirection = myTransform.forward;
+                            }
+                            Quaternion tr = Quaternion.LookRotation(targetDirection);
+                            Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rotationSpeed * Time.deltaTime);
 
-                    transform.rotation = targetRotation;
+                            transform.rotation = targetRotation;
+                        }
+                    else
+                    {
+                        Vector3 rotationDiretion = moveDirection;
+                        rotationDiretion = cameraHandler.currentLockOnTarget.position - transform.position;
+                        rotationDiretion.y = 0;
+                        rotationDiretion.Normalize();
+                        Quaternion tr = Quaternion.LookRotation(rotationDiretion);
+                        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, rotationSpeed * Time.deltaTime);
+                        transform.rotation = targetRotation;
+                    }
                 }
                 else
                 {
-                    Vector3 rotationDiretion = moveDirection;
-                    rotationDiretion = cameraHandler.currentLockOnTarget.position - transform.position;
-                    rotationDiretion.y = 0;
-                    rotationDiretion.Normalize();
-                    Quaternion tr = Quaternion.LookRotation(rotationDiretion);
-                    Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, rotationSpeed * Time.deltaTime);
-                    transform.rotation = targetRotation;
+                    Vector3 targetDir = Vector3.zero;
+                    float moveOverride = inputHandler.moveAmount;
+                    targetDir = cameraObject.forward * inputHandler.vertical;
+                    targetDir += cameraObject.right * inputHandler.horizontal;
+                    targetDir.Normalize();
+                    targetDir.y = 0;
+                    if (targetDir == Vector3.zero)
+                        targetDir = myTransform.forward;
+                    float rs = rotationSpeed;
+                    Quaternion tr = Quaternion.LookRotation(targetDir);
+                    Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
+                    myTransform.rotation = targetRotation;
                 }
-           }
-           else
-           {
-                Vector3 targetDir = Vector3.zero;
-                float moveOverride = inputHandler.moveAmount;
-                targetDir = cameraObject.forward * inputHandler.vertical;
-                targetDir += cameraObject.right * inputHandler.horizontal;
-                targetDir.Normalize();
-                targetDir.y = 0;
-                if (targetDir == Vector3.zero)
-                    targetDir = myTransform.forward;
-                float rs = rotationSpeed;
-                Quaternion tr = Quaternion.LookRotation(targetDir);
-                Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
-                myTransform.rotation = targetRotation;
-           }
+            }
         }
         public void HandleMovement(float delta)
         {
@@ -136,10 +139,6 @@ namespace SG
             else
             {
                 animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
-            }
-            if (animatorHandler.canRotate)
-            {
-                HandleRotation(delta);
             }
         }
         public void HandleRollingAndSprinting(float delta)

@@ -5,6 +5,12 @@ namespace SG
 {    
     public class CharacterManager : MonoBehaviour
     {
+        [Header("Lock On Transform")]
         public Transform lockOnTransform;
+        [Header("Combat Colliders")]
+        public BoxCollider backStabBoxCollider;
+        public BackStabCollider backStabCollider;
+
+        public int pendingCriticalDamage; // used by stab or riposte animation
     }
 }

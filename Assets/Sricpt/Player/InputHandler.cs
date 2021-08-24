@@ -10,6 +10,7 @@ namespace SG
         public float moveAmount;
         public float mouseX;
         public float mouseY;
+
         public bool b_Input;
         public bool a_Input;
         public bool y_Input;
@@ -17,6 +18,7 @@ namespace SG
         public bool rt_Input;
         public bool lb_Input;
         public bool lt_Input;
+        public bool critical_Attack_Input;
         public bool jump_Input;
         public bool inventory_Input;
         public bool lockOnInput;
@@ -36,8 +38,10 @@ namespace SG
         public bool inventoryFlag;
         public float rollInputTimer;
         
+        public Transform criticalAttackRayCastStartPoint;
+
         PlayerControls inputActions;
-        AnimatorHandler animatorHandler; 
+        PlayerAnimatorManager animatorHandler; 
         PlayerAttacker playerAttacker;
         PlayerInventory playerInventory;
         PlayerManager playerManager;
@@ -55,7 +59,7 @@ namespace SG
             weaponSlotManager = GetComponentInChildren<WeaponSlotManager>();
             uiManage = FindObjectOfType<UIManage>();
             cameraHandler = FindObjectOfType<CameraHandler>();
-            animatorHandler = GetComponentInChildren<AnimatorHandler>();
+            animatorHandler = GetComponentInChildren<PlayerAnimatorManager>();
         }
         public void OnEnable()
         {
@@ -80,6 +84,7 @@ namespace SG
                 inputActions.PlayerMovement.LockOnTargetLeft.performed +=i => right_Stick_Left_Input = true;
                 inputActions.PlayerMovement.LockOnTargetRight.performed += i => right_Stick_Right_Input = true;
 
+                inputActions.PlayerActions.CriticalAttack.performed += i => critical_Attack_Input = true;
             }
             inputActions.Enable();
         }
@@ -96,6 +101,7 @@ namespace SG
             HandleInventoryInput();
             HandleLockOnInput();
             HandleTwoHandInput();
+            HandleCriticalAttackInput();
         }
         private void HandleMoveInput(float delta)
         {
@@ -240,6 +246,14 @@ namespace SG
                     weaponSlotManager.LoadWeaponOnSlot(playerInventory.rightWeapon,false);
                     weaponSlotManager.LoadWeaponOnSlot(playerInventory.leftWeapon,true);
                 }
+            }
+        }
+        private void HandleCriticalAttackInput()
+        {
+            if(critical_Attack_Input)
+            {
+                critical_Attack_Input = false;
+                playerAttacker.AttemptBackStabOrRiposte();
             }
         }
     }

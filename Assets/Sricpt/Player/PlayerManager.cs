@@ -10,6 +10,7 @@ namespace SG
         Animator anim;
         CameraHandler cameraHandler;
         PlayerStates playerStates;
+        PlayerAnimatorManager playerAnimatorManager;
         PlayerLocomotion playerLocomotion;
         InteractableUI interactableUI;
         public GameObject interactableUIGameObject;
@@ -36,6 +37,8 @@ namespace SG
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
             playerStates = GetComponent<PlayerStates>();
+            backStabCollider = GetComponentInChildren<BackStabCollider>();
+            playerAnimatorManager = GetComponentInChildren<PlayerAnimatorManager>();
         }
 
         // Update is called once per frame
@@ -44,8 +47,9 @@ namespace SG
             isInteracting = anim.GetBool("isInteracting");
             canDoCombo = anim.GetBool("canDoCombo");
             isInvulerable = anim.GetBool("isInvulerable");
+            playerAnimatorManager.canRotate = anim.GetBool("canRotate");
             anim.SetBool("isInAir",isInAir);
-
+            anim.SetBool("isDead", playerStates.isDead);
             float delta = Time.deltaTime;
 
             inputHandler.TickInput(delta);
@@ -59,6 +63,7 @@ namespace SG
         private void FixedUpdate()
         {
             float delta = Time.fixedDeltaTime;
+            playerLocomotion.HandleRotation(delta);
             playerLocomotion.HandleMovement(delta);
             playerLocomotion.HandleFalling(delta,playerLocomotion.moveDirection);
         }

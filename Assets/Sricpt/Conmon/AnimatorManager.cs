@@ -6,6 +6,8 @@ namespace  SG
     public class AnimatorManager : MonoBehaviour
     {
         public Animator anim;
+        public bool canRotate;
+
         public void PlayTargetAnimation(string targetAnim, bool isInteracting)
         {
             if(targetAnim == null)
@@ -18,6 +20,10 @@ namespace  SG
                 anim.SetBool("isInteracting", isInteracting);
                 anim.CrossFade(targetAnim, 0.2f);
             }
+        }
+        public virtual void TakeCriticalDamageAnimationEvent()
+        {
+            
         }
     }
 }

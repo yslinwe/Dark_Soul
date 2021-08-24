@@ -19,11 +19,11 @@ namespace  SG
         [TextArea]
         public string spellDescription;
 
-        public virtual void AttemptToCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
+        public virtual void AttemptToCastSpell(PlayerAnimatorManager animatorHandler, PlayerStates playerStates)
         {
             Debug.Log("You attempt to cast a spell!");
         }
-        public virtual void SuccessfullyCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
+        public virtual void SuccessfullyCastSpell(PlayerAnimatorManager animatorHandler, PlayerStates playerStates)
         {
             Debug.Log("You successfully cast a spell!");
             playerStates.DeDuctFocusPoints(focusPointCost);

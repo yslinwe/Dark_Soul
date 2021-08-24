@@ -28,7 +28,7 @@ namespace SG
                 PlayerStates playerStates = collision.GetComponent<PlayerStates>();
                 if(playerStates != null)
                 {
-                    playerStates.TakeDamge(currentWeaponDamage);
+                    playerStates.TakeDamage(currentWeaponDamage);
                 }
             }
             if(collision.tag == "Player")
@@ -36,7 +36,7 @@ namespace SG
                 PlayerStates playerStates = collision.GetComponent<PlayerStates>();
                 if(playerStates != null)
                 {
-                    playerStates.TakeDamge(currentWeaponDamage);
+                    playerStates.TakeDamage(currentWeaponDamage);
                 }
             }
             if(collision.tag == "Enemy")
@@ -44,7 +44,7 @@ namespace SG
                 EnemyStates enemyStates = collision.GetComponent<EnemyStates>();
                 if(enemyStates != null)
                 {
-                    enemyStates.TakeDamge(currentWeaponDamage);
+                    enemyStates.TakeDamage(currentWeaponDamage);
                 }
             }
         }

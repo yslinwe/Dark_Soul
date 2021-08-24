@@ -23,7 +23,19 @@ namespace SG
             maxHealth = healthLevel * 10;
             return maxHealth;
         }
-        public void TakeDamge(int damage)
+        public void TakeDamageNoAnimation(int damage)
+        {
+             if(isDead)
+                return;
+            currentHealth -= damage;
+            if(currentHealth<=0)
+            {
+                currentHealth = 0;
+                isDead = true;
+                //Handle Player Death
+            }
+        }
+        public void TakeDamage(int damage)
         {
             if(isDead)
                 return;

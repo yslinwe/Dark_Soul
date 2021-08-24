@@ -29,6 +29,7 @@ namespace SG
             enemyLocomotionManager = GetComponent<EnemyLocomotionManager>();
             enemyAninmatorManager = GetComponentInChildren<EnemyAninmatorManager>();
             enemyStates = GetComponent<EnemyStates>();
+            backStabCollider = GetComponentInChildren<BackStabCollider>();
             navMeshAgent = GetComponentInChildren<NavMeshAgent>();
             enemyRigidBody = GetComponent<Rigidbody>();
         }
@@ -39,6 +40,7 @@ namespace SG
         private void Update() {
             HandleRecoveryTimer();
             isInteracting = enemyAninmatorManager.anim.GetBool("isInteracting");
+            enemyAninmatorManager.anim.SetBool("isDead",enemyStates.isDead);
         }
         private void FixedUpdate() {
             HandleStateMachine();

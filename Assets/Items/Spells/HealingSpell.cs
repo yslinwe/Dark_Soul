@@ -7,7 +7,7 @@ namespace SG
     public class HealingSpell : SpellItem
     {
         public int healAmount;
-        public override void AttemptToCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
+        public override void AttemptToCastSpell(PlayerAnimatorManager animatorHandler, PlayerStates playerStates)
         {
             base.AttemptToCastSpell(animatorHandler,playerStates);
             GameObject instantiateWarmUpSpellFX = Instantiate(spellWarmUpFX, animatorHandler.transform);
@@ -15,7 +15,7 @@ namespace SG
             Destroy(instantiateWarmUpSpellFX,1);
             Debug.Log("Attempt to cast spell...");
         }
-        public override void SuccessfullyCastSpell(AnimatorHandler animatorHandler, PlayerStates playerStates)
+        public override void SuccessfullyCastSpell(PlayerAnimatorManager animatorHandler, PlayerStates playerStates)
         {
             base.SuccessfullyCastSpell(animatorHandler,playerStates);
             GameObject instantiatedSpellFX = Instantiate(spellCastFX, animatorHandler.transform);

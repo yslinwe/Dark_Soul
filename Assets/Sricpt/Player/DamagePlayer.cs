@@ -12,7 +12,7 @@ namespace SG
             PlayerStates playerStates = other.GetComponent<PlayerStates>();
             if (playerStates != null)
             {
-                playerStates.TakeDamge(damage);
+                playerStates.TakeDamage(damage);
             }
         }
     }
